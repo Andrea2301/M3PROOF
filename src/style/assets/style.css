@@ -1,0 +1,159 @@
+/*Normaliza estilos*/
+*{
+    margin: 0;
+    padding: 0;
+    outline: 0;
+    box-sizing: border-box;
+    background-color: transparent;
+}
+
+.nav-links ul{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    list-style: none;
+    text-decoration: none;
+}
+
+
+a{
+    text-decoration: none;
+}
+
+.login-form{
+  background-color: #ffffff;
+  height: 500px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 300px;
+  margin: 20px;
+  justify-content: center;
+}
+
+.login-form input{
+  width: 200px;
+  border:solid color#726f6f;
+  height: 35px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+.login-form button{
+  width: 200px;
+  height: 30px;
+  max-height: 100px;
+  color: white;
+  background-color: #6A00FE;
+  border-radius: 10px;
+  border: 0;
+
+}
+
+.register-form{
+  background-color: #ffffff;
+  height: 500px;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap:20px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  width: 300px;
+  margin: 20px;
+  justify-content: center;
+
+}
+.register-form input{
+  width: 200px;
+  border:solid color#726f6f;
+  height: 35px;
+  border-radius: 10px;
+  -webkit-border-radius: 10px;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+}
+
+.register-form button{
+  width: 200px;
+  height: 30px;
+  max-height: 100px;
+  color: white;
+  background-color: #6A00FE;
+  border-radius: 10px;
+  border: 0;
+
+}
+
+.lateral-menu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 250px;
+  height: 100%;
+  background-color: #f4f4f4;
+  padding: 20px;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 2px 5px;
+}
+
+
+/* ======================
+   MOBILE FIRST DESIGN
+   Base: estilos para móviles (hasta 480px)
+====================== */
+
+/* Tus estilos generales van aquí (mobile por defecto) */
+body {
+  font-size: 16px;
+  margin: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+
+
+/* ======================
+    (móviles)≥ 481px
+====================== */
+@media screen and (min-width: 481px) {
+  body {
+    font-size: 17px;
+  }
+}
+
+
+/* ======================
+    (tablets)≥ 768px
+====================== */
+@media screen and (min-width: 768px) {
+  .container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  nav {
+    flex-direction: row;
+  }
+}
+
+
+/*======================
+    (laptops)≥ 1024px
+====================== */
+@media screen and (min-width: 1024px) {
+  .container {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  header {
+    padding: 40px;
+  }
+}
+
+
