@@ -1,66 +1,19 @@
-export async function get(url) {
-  try {
-    const response = await fetch(url);
-    const data = await response.json();
-    return data
-  } catch (error) {
-    console.error("Error en GET:", error);
-  }
-}
+// router.js
 
-export async function post(url, body) {
-  try {
-    const response = await fetch(url, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body) 
-    });
+// Importa las vistas que quieras mostrar:
+import { renderLoginView } from './views/login.js';
+import { renderDashboard } from './views/dashboard.js';
+import { renderCreateEvent } from './views/events-create.js';
+import { renderEditEvent } from './views/events-edit.js';
+import { renderNotFound } from './views/not-found.js';
 
-    const data = await response.json();
-    return data
-  } catch (error) {
-    console.error("Error en POST:", error);
-  }
-}
+// Función principal del router
+export function router() {
+  const app = document.getElementById('app');
+  const path = window.location.hash || '#/login';
+  const user = JSON.parse(localStorage.getItem('user'));
 
-
-
-export async function update(url, id, body) {
-  try {
-    const response = await fetch(`${url}/${id}`, {
-      method: "PUT",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body) 
-    });
-
-    const data = await response.json();
-    console.log("PUT actualizado:", data);
-    return data;
-  } catch (error) {
-    console.error("Error en PUT:", error);
-    throw error;
-  }
-}
-
-export async function deletes(url, id) {
-  try {
-    const response = await fetch( `${url}/${id}`, {
-      method: "DELETE"
-    });
-
-    if (response.ok) {
-      console.log("DELETE: recurso eliminado correctamente");
-      return true;
-    } else {
-      console.error("Error al eliminar");
-      return false;
-    }
-  } catch (error) {
-    console.error("Error en DELETE:", error);
-    throw error;
-  }
-}
+  // Proteger rutas si no está logueado
+  const authRequired = path.startsWith('#/dashboard');
+  if (!user && authRequired) {
+    location
