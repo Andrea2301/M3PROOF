@@ -1,26 +1,55 @@
-const app = document.getElementById('script');
+// 📁 router.js
 
-const routes = {
-  '/': '/src/html/home.html',
-  '/register': '/src/html/register.html',
-  '/login':'/src/html/login.html',
-};
+import { renderLoginView } from './views/login.js';
+import { renderRegisterView } from './views/register.js';
+import { renderDashboard } from './views/dashboard.js';
+import { renderCreateEvent } from './views/events-create.js';
+import { renderEditEvent } from './views/events-edit.js';
+import { renderNotFound } from './views/not-found.js';
 
-async function router() {
-  const hash = window.location.hash || '#/';
-  const route = hash.slice(1);
-  const view = routes[route];
+export function router() {
+  const path = window.location.hash || '#/login';
+  const app = document.getElementById('app');
+  const user = JSON.parse(localStorage.getItem('user'));
 
-  if (view) {
-    try {
-      const res = await fetch(view);
-      const html = await res.text();
-      app.innerHTML = html;
-    } catch (err) {
-      app.innerHTML = `<h1>Error</h1><p>No se pudo cargar la vista: ${route}</p>`;
-    }
-  } else {
-    app.innerHTML = '<h1>404</h1><p>Página no encontrada</p>';
+  const authRoutes = ['#/dashboard', '#/dashboard/events/create', '#/dashboard/events/edit'];
+
+  if (!user && authRoutes.includes(path)) {
+    location.hash = '#/not-found';
+    return;
+  }
+
+  if (user && (path === '#/login' || path === '#/register')) {
+    location.hash = '#/dashboard';
+    return;
+  }
+
+  if (user?.role === 'visitor' && path.startsWith('#/dashboard/events')) {
+    location.hash = '#/not-found';
+    return;
+  }
+
+  switch (path) {
+    case '#/login':
+      renderLoginView(app);
+      break;
+    case '#/register':
+      renderRegisterView(app);
+      break;
+    case '#/dashboard':
+      renderDashboard(app);
+      break;
+    case '#/dashboard/events/create':
+      renderCreateEvent(app);
+      break;
+    case '#/dashboard/events/edit':
+      renderEditEvent(app);
+      break;
+    case '#/not-found':
+      renderNotFound(app);
+      break;
+    default:
+      location.hash = '#/not-found';
   }
 }
 
