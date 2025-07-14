@@ -1,57 +1,43 @@
-// 📁 router.js
+<!-- Panel admin -->
+<div id="adminPanel" style="display: none;">
+  <h3>Crear evento</h3>
+  <form id="eventForm">
+    <input type="text" id="eventTitle" placeholder="Título del evento" required />
+    <input type="date" id="eventDate" required />
+    <input type="text" id="eventLocation" placeholder="Lugar" required />
+    <input type="number" id="eventCapacity" placeholder="Capacidad máxima" min="1" required />
+    <button type="submit">Crear evento</button>
+  </form>
+  <p id="eventMsg" style="color: green;"></p>
+</div>
 
-import { renderLoginView } from './views/login.js';
-import { renderRegisterView } from './views/register.js';
-import { renderDashboard } from './views/dashboard.js';
-import { renderCreateEvent } from './views/events-create.js';
-import { renderEditEvent } from './views/events-edit.js';
-import { renderNotFound } from './views/not-found.js';
 
-export function router() {
-  const path = window.location.hash || '#/login';
-  const app = document.getElementById('app');
-  const user = JSON.parse(localStorage.getItem('user'));
+const eventForm = document.getElementById('eventForm');
+const eventMsg = document.getElementById('eventMsg');
 
-  const authRoutes = ['#/dashboard', '#/dashboard/events/create', '#/dashboard/events/edit'];
+eventForm.addEventListener('submit', (e) => {
+  e.preventDefault();
 
-  if (!user && authRoutes.includes(path)) {
-    location.hash = '#/not-found';
-    return;
-  }
+  const newEvent = {
+    title: document.getElementById('eventTitle').value.trim(),
+    date: document.getElementById('eventDate').value,
+    location: document.getElementById('eventLocation').value.trim(),
+    capacity: parseInt(document.getElementById('eventCapacity').value),
+    registered: 0
+  };
 
-  if (user && (path === '#/login' || path === '#/register')) {
-    location.hash = '#/dashboard';
-    return;
-  }
-
-  if (user?.role === 'visitor' && path.startsWith('#/dashboard/events')) {
-    location.hash = '#/not-found';
-    return;
-  }
-
-  switch (path) {
-    case '#/login':
-      renderLoginView(app);
-      break;
-    case '#/register':
-      renderRegisterView(app);
-      break;
-    case '#/dashboard':
-      renderDashboard(app);
-      break;
-    case '#/dashboard/events/create':
-      renderCreateEvent(app);
-      break;
-    case '#/dashboard/events/edit':
-      renderEditEvent(app);
-      break;
-    case '#/not-found':
-      renderNotFound(app);
-      break;
-    default:
-      location.hash = '#/not-found';
-  }
-}
-
-window.addEventListener('hashchange', router);
-window.addEventListener('load', router);
+  fetch('http://localhost:3000/events', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(newEvent)
+  })
+    .then(() => {
+      eventMsg.textContent = 'Evento creado correctamente.';
+      eventForm.reset();
+      loadEvents(); // si tienes una función para actualizar la lista
+    })
+    .catch(() => {
+      eventMsg.textContent = 'Error al crear el evento.';
+      eventMsg.style.color = 'red';
+    });
+});
